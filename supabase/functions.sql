@@ -1,4 +1,3 @@
-```sql
 -- ============================================================
 -- Wedding Website Database Functions
 -- Current-state snapshot
@@ -42,13 +41,11 @@ begin
                         'id', g.id,
                         'first_name', g.first_name,
                         'last_name', g.last_name,
-                        'plus_one', g.plus_one,
 
                         'rsvp', case
                             when r.id is null then null
                             else json_build_object(
                                 'attending', r.attending,
-                                'meal_choice', r.meal_choice,
                                 'dietary_restrictions', r.dietary_restrictions,
                                 'song_request', r.song_request,
                                 'bus_signup', r.bus_signup,
@@ -110,7 +107,6 @@ to anon;
 --   {
 --     "guest_id": "uuid",
 --     "attending": true,
---     "meal_choice": "Chicken",
 --     "dietary_restrictions": "Gluten free",
 --     "song_request": "Dancing Queen",
 --     "bus_signup": true
@@ -141,7 +137,6 @@ declare
     v_guest_id uuid;
     v_attending boolean;
 
-    v_meal_choice text;
     v_dietary_restrictions text;
     v_song_request text;
     v_bus_signup boolean;
@@ -174,6 +169,26 @@ begin
         raise exception 'Responses must be a JSON array';
     end if;
 
+    if jsonb_array_length(p_responses) = 0 then
+        raise exception 'At least one response is required';
+    end if;
+
+    if jsonb_array_length(p_responses) <> (
+        select count(*)
+        from public.guests g
+        where g.household_id = v_household_id
+          and g.invited = true
+    ) then
+        raise exception 'A response is required for every invited guest';
+    end if;
+
+    if (
+        select count(distinct response ->> 'guest_id')
+        from jsonb_array_elements(p_responses) response
+    ) <> jsonb_array_length(p_responses) then
+        raise exception 'Duplicate guest responses are not allowed';
+    end if;
+
 
     -- --------------------------------------------------------
     -- Process each guest response.
@@ -193,15 +208,13 @@ begin
         v_attending :=
             (v_response ->> 'attending')::boolean;
 
+        if v_guest_id is null or v_attending is null then
+            raise exception 'Guest ID and attendance are required';
+        end if;
+
 
         -- Optional text fields.
         -- Empty strings are stored as NULL.
-        v_meal_choice :=
-            nullif(
-                trim(v_response ->> 'meal_choice'),
-                ''
-            );
-
         v_dietary_restrictions :=
             nullif(
                 trim(v_response ->> 'dietary_restrictions'),
@@ -213,6 +226,11 @@ begin
                 trim(v_response ->> 'song_request'),
                 ''
             );
+
+        if length(v_dietary_restrictions) > 500
+            or length(v_song_request) > 500 then
+            raise exception 'Text responses must be 500 characters or fewer';
+        end if;
 
 
         -- Bus signup defaults to false if omitted.
@@ -249,14 +267,11 @@ begin
         -- If the guest declined, clear fields that only apply
         -- to attending guests.
         --
-        -- Song request is intentionally retained because the
-        -- current application allows declined guests to submit
-        -- one as well.
         -- ----------------------------------------------------
 
         if v_attending = false then
-            v_meal_choice := null;
             v_dietary_restrictions := null;
+            v_song_request := null;
             v_bus_signup := false;
         end if;
 
@@ -271,7 +286,6 @@ begin
         insert into public.rsvps (
             guest_id,
             attending,
-            meal_choice,
             dietary_restrictions,
             song_request,
             bus_signup,
@@ -281,7 +295,6 @@ begin
         values (
             v_guest_id,
             v_attending,
-            v_meal_choice,
             v_dietary_restrictions,
             v_song_request,
             v_bus_signup,
@@ -292,7 +305,6 @@ begin
         on conflict (guest_id)
         do update set
             attending = excluded.attending,
-            meal_choice = excluded.meal_choice,
             dietary_restrictions =
                 excluded.dietary_restrictions,
             song_request = excluded.song_request,
@@ -328,4 +340,3 @@ from authenticated;
 grant execute
 on function public.submit_rsvp(text, jsonb)
 to anon;
-```

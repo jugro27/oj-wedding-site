@@ -1,4 +1,3 @@
-```sql
 -- ============================================================
 -- Wedding Website Database Schema
 -- Current-state snapshot
@@ -45,7 +44,6 @@ create table public.guests (
     last_name text not null,
 
     invited boolean not null default true,
-    plus_one boolean not null default false,
 
     created_at timestamptz not null default now()
 );
@@ -67,7 +65,6 @@ create table public.rsvps (
 
     attending boolean,
 
-    meal_choice text,
     dietary_restrictions text,
     song_request text,
 
@@ -136,4 +133,3 @@ from anon, authenticated;
 
 create index idx_guests_household_id
     on public.guests(household_id);
-```

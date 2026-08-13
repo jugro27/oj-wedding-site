@@ -9,7 +9,6 @@ Supabase provides the backend for:
 * wedding households / invitations
 * invited guests
 * RSVP responses
-* meal selections
 * dietary restrictions
 * song requests
 * bus transportation signups
@@ -145,10 +144,7 @@ Important fields include:
 * `first_name`
 * `last_name`
 * `invited`
-* `plus_one`
 * `created_at`
-
-The current `plus_one` field indicates plus-one eligibility. Plus-one workflow may be expanded later.
 
 ---
 
@@ -172,7 +168,6 @@ Important fields include:
 
 * `guest_id`
 * `attending`
-* `meal_choice`
 * `dietary_restrictions`
 * `song_request`
 * `bus_signup`
@@ -255,10 +250,8 @@ Example response shape:
       "id": "uuid",
       "first_name": "Sarah",
       "last_name": "Smith",
-      "plus_one": false,
       "rsvp": {
         "attending": true,
-        "meal_choice": "Chicken",
         "dietary_restrictions": null,
         "song_request": "Dancing Queen",
         "bus_signup": true,
@@ -297,7 +290,6 @@ Example payload:
   {
     "guest_id": "uuid",
     "attending": true,
-    "meal_choice": "Chicken",
     "dietary_restrictions": "Gluten free",
     "song_request": "Dancing Queen",
     "bus_signup": true
@@ -308,13 +300,11 @@ Example payload:
 The function:
 
 1. resolves the household from the invitation code
-2. verifies every submitted guest belongs to that household
-3. rejects guests that do not belong to the invitation
-4. inserts new RSVP rows
-5. updates existing RSVP rows
-6. clears attendance-only fields when a guest declines
-
-The current application retains `song_request` even when a guest declines.
+2. requires exactly one response for every invited guest
+3. rejects duplicate guests and guests outside the invitation
+4. validates attendance and text lengths
+5. inserts new RSVP rows or updates existing rows
+6. clears dietary, transportation, and song fields when a guest declines
 
 ---
 
@@ -373,7 +363,6 @@ Current RSVP fields per guest:
 
 ```text
 Attending
-Meal choice
 Dietary restrictions
 Bus signup
 Song request
@@ -390,10 +379,10 @@ The frontend currently assumes:
 * invitation codes are case-insensitive
 * one RSVP row exists per guest
 * RSVP responses can be updated later
-* guests who decline do not keep meal selections
+* every named, invited guest must submit an attendance response
 * guests who decline are not signed up for the bus
-* song requests are currently allowed regardless of attendance status
-* unnamed plus-one handling has not yet been fully implemented
+* guests who decline do not keep dietary restrictions or song requests
+* plus-ones are not supported
 
 If any of these behaviors change, update both the frontend and Supabase functions together where necessary.
 

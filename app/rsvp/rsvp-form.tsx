@@ -15,7 +15,6 @@ function responsesFor(invitation: Invitation) {
         attending: guest.rsvp?.attending ?? null,
         dietary_restrictions: guest.rsvp?.dietary_restrictions ?? "",
         song_request: guest.rsvp?.song_request ?? "",
-        bus_signup: guest.rsvp?.bus_signup ?? false,
       },
     ]),
   ) as Record<string, GuestResponse>;
@@ -101,7 +100,7 @@ export function RSVPForm() {
         attending,
         ...(attending
           ? {}
-          : { dietary_restrictions: "", song_request: "", bus_signup: false }),
+          : { dietary_restrictions: "", song_request: "" }),
       },
     }));
     setError("");
@@ -137,7 +136,6 @@ export function RSVPForm() {
             ? response.dietary_restrictions.trim()
             : "",
           song_request: response.attending ? response.song_request.trim() : "",
-          bus_signup: response.attending ? response.bus_signup : false,
         };
       });
 
@@ -299,20 +297,6 @@ export function RSVPForm() {
                           value={response.dietary_restrictions}
                           onChange={(event) => updateResponse(guest.id, "dietary_restrictions", event.target.value)}
                         />
-                      </div>
-
-                      <div className="form-group">
-                        <label className="check-option">
-                          <input
-                            type="checkbox"
-                            checked={response.bus_signup}
-                            onChange={(event) => updateResponse(guest.id, "bus_signup", event.target.checked)}
-                          />
-                          <span>
-                            <strong>Interested in bus transportation</strong>
-                            <small>Transportation details are coming soon.</small>
-                          </span>
-                        </label>
                       </div>
 
                       <div className="form-group">

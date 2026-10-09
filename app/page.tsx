@@ -19,8 +19,8 @@ const travelCards = [
   },
   {
     number: "03",
-    title: "Getting around",
-    copy: "Transportation details to and from the venue are coming soon.",
+    title: "While you're here",
+    copy: "Our favorite things to see, eat, and do nearby are coming soon.",
   },
 ];
 
@@ -64,8 +64,8 @@ export default function Home() {
             </svg>
             <span />
           </div>
-          <p className="hero-date">November 5, 2027</p>
-          <p className="hero-place">San Marcos, Texas</p>
+          <p className="hero-date">November 7, 2027</p>
+          <p className="hero-place"> Austin, Texas</p>
           <Link className="button button-primary" href="/rsvp">
             RSVP to celebrate
           </Link>
@@ -89,7 +89,7 @@ export default function Home() {
             We can&apos;t wait to gather with the people we love most for an
             autumn evening full of good food, happy tears, and dancing.
           </p>
-          <p className="script-note">See you in San Marcos</p>
+          <p className="script-note">See you in Austin</p>
         </div>
       </section>
 
@@ -100,27 +100,27 @@ export default function Home() {
         </div>
         <div className="detail-grid section-shell">
           <article className="venue-card">
-            <p className="detail-kicker">Friday</p>
-            <p className="date-number">05</p>
+            <p className="detail-kicker">Sunday</p>
+            <p className="date-number">07</p>
             <p className="detail-kicker">November 2027</p>
           </article>
           <article className="venue-copy">
             <p className="eyebrow">The venue</p>
-            <h3>Windemere Farms</h3>
+            <h3>Woodbine Mansion</h3>
             <address>
-              200 Windermere Rd<br />
-              San Marcos, TX 78666
+              405 E. Main Street<br />
+              Round Rock, TX 78664
             </address>
             <a
               className="text-link"
-              href="https://www.google.com/maps/search/?api=1&query=200+Windermere+Rd+San+Marcos+TX+78666"
+              href="https://www.google.com/maps/search/?api=1&query=405+E+Main+Street+Round+Rock+TX+78664"
               target="_blank"
               rel="noreferrer"
             >
               View on map <span aria-hidden="true">↗</span>
             </a>
           </article>
-          <div className="image-placeholder landscape-placeholder" role="img" aria-label="Placeholder for a photograph of Windemere Farms">
+          <div className="image-placeholder landscape-placeholder" role="img" aria-label="Placeholder for a photograph of Woodbine Mansion">
             <span>Venue photograph</span>
             <small>Coming soon</small>
           </div>
@@ -149,7 +149,7 @@ export default function Home() {
         <div className="section-heading">
           <p className="eyebrow">Plan your visit</p>
           <h2 id="travel-title">Travel &amp; stay</h2>
-          <p>Everything you need for a lovely weekend in the Hill Country.</p>
+          <p>Everything you need for a lovely weekend in Austin.</p>
         </div>
         <div className="travel-grid section-shell">
           {travelCards.map((card) => (
@@ -190,7 +190,7 @@ export default function Home() {
 
       <footer>
         <p className="monogram">O <span>&amp;</span> J</p>
-        <p>November 5, 2027 · San Marcos, Texas</p>
+        <p>November 7, 2027 · Austin, Texas</p>
       </footer>
     </main>
   );

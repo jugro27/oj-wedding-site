@@ -65,7 +65,6 @@ test("looks up an invitation, validates every guest, and saves responses", async
 
   await page.getByRole("radio", { name: "Joyfully accepts" }).first().check();
   await page.getByLabel("Dietary restrictions").fill("Gluten free");
-  await page.getByLabel("Interested in bus transportation").check();
   await page.getByLabel("Song request").fill("Dancing Queen");
   await page.getByRole("button", { name: "Submit RSVP" }).click();
 
@@ -80,14 +79,12 @@ test("looks up an invitation, validates every guest, and saves responses", async
       attending: true,
       dietary_restrictions: "Gluten free",
       song_request: "Dancing Queen",
-      bus_signup: true,
     },
     {
       guest_id: invitation.guests[1].id,
       attending: false,
       dietary_restrictions: "",
       song_request: "",
-      bus_signup: false,
     },
   ]);
 });
@@ -106,14 +103,12 @@ test("prefills an existing RSVP and clears attending-only answers on decline", a
     attending: true,
     dietary_restrictions: "Nut allergy",
     song_request: "September",
-    bus_signup: true,
     submitted_at: "2026-08-11T12:00:00Z",
   };
   existing.guests[1].rsvp = {
     attending: false,
     dietary_restrictions: null,
     song_request: null,
-    bus_signup: false,
     submitted_at: "2026-08-11T12:00:00Z",
   };
   const api = await mockSupabase(page, existing);
@@ -134,14 +129,12 @@ test("prefills an existing RSVP and clears attending-only answers on decline", a
       attending: false,
       dietary_restrictions: "",
       song_request: "",
-      bus_signup: false,
     },
     {
       guest_id: invitation.guests[1].id,
       attending: false,
       dietary_restrictions: "",
       song_request: "",
-      bus_signup: false,
     },
   ]);
 });

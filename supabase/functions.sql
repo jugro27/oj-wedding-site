@@ -48,7 +48,6 @@ begin
                                 'attending', r.attending,
                                 'dietary_restrictions', r.dietary_restrictions,
                                 'song_request', r.song_request,
-                                'bus_signup', r.bus_signup,
                                 'submitted_at', r.submitted_at
                             )
                         end
@@ -108,8 +107,7 @@ to anon;
 --     "guest_id": "uuid",
 --     "attending": true,
 --     "dietary_restrictions": "Gluten free",
---     "song_request": "Dancing Queen",
---     "bus_signup": true
+--     "song_request": "Dancing Queen"
 --   }
 -- ]
 --
@@ -139,7 +137,6 @@ declare
 
     v_dietary_restrictions text;
     v_song_request text;
-    v_bus_signup boolean;
 begin
 
     -- --------------------------------------------------------
@@ -233,14 +230,6 @@ begin
         end if;
 
 
-        -- Bus signup defaults to false if omitted.
-        v_bus_signup :=
-            coalesce(
-                (v_response ->> 'bus_signup')::boolean,
-                false
-            );
-
-
         -- ----------------------------------------------------
         -- Security check:
         --
@@ -272,7 +261,6 @@ begin
         if v_attending = false then
             v_dietary_restrictions := null;
             v_song_request := null;
-            v_bus_signup := false;
         end if;
 
 
@@ -288,7 +276,6 @@ begin
             attending,
             dietary_restrictions,
             song_request,
-            bus_signup,
             submitted_at,
             updated_at
         )
@@ -297,7 +284,6 @@ begin
             v_attending,
             v_dietary_restrictions,
             v_song_request,
-            v_bus_signup,
             now(),
             now()
         )
@@ -308,7 +294,6 @@ begin
             dietary_restrictions =
                 excluded.dietary_restrictions,
             song_request = excluded.song_request,
-            bus_signup = excluded.bus_signup,
             submitted_at = excluded.submitted_at,
             updated_at = excluded.updated_at;
 

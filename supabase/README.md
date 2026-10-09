@@ -11,7 +11,6 @@ Supabase provides the backend for:
 * RSVP responses
 * dietary restrictions
 * song requests
-* bus transportation signups
 
 The guest-facing website uses controlled Postgres RPC functions rather than direct browser access to the underlying tables.
 
@@ -73,7 +72,7 @@ Example:
 ```text
 supabase/migrations/
 ├── 20260811_001_initial_schema.sql
-├── 20260811_002_add_bus_signup.sql
+├── 20260811_002_add_rsvp_fields.sql
 └── 20260812_001_add_guest_email.sql
 ```
 
@@ -170,7 +169,6 @@ Important fields include:
 * `attending`
 * `dietary_restrictions`
 * `song_request`
-* `bus_signup`
 * `submitted_at`
 * `updated_at`
 
@@ -254,7 +252,6 @@ Example response shape:
         "attending": true,
         "dietary_restrictions": null,
         "song_request": "Dancing Queen",
-        "bus_signup": true,
         "submitted_at": "2026-08-11T..."
       }
     }
@@ -291,8 +288,7 @@ Example payload:
     "guest_id": "uuid",
     "attending": true,
     "dietary_restrictions": "Gluten free",
-    "song_request": "Dancing Queen",
-    "bus_signup": true
+    "song_request": "Dancing Queen"
   }
 ]
 ```
@@ -304,7 +300,7 @@ The function:
 3. rejects duplicate guests and guests outside the invitation
 4. validates attendance and text lengths
 5. inserts new RSVP rows or updates existing rows
-6. clears dietary, transportation, and song fields when a guest declines
+6. clears dietary and song fields when a guest declines
 
 ---
 
@@ -364,13 +360,8 @@ Current RSVP fields per guest:
 ```text
 Attending
 Dietary restrictions
-Bus signup
 Song request
 ```
-
-`bus_signup` is per guest so transportation headcounts can be calculated accurately.
-
----
 
 # Current Application Assumptions
 
@@ -380,7 +371,6 @@ The frontend currently assumes:
 * one RSVP row exists per guest
 * RSVP responses can be updated later
 * every named, invited guest must submit an attendance response
-* guests who decline are not signed up for the bus
 * guests who decline do not keep dietary restrictions or song requests
 * plus-ones are not supported
 

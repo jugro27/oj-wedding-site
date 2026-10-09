@@ -2,7 +2,6 @@ export type ExistingRSVP = {
   attending: boolean;
   dietary_restrictions: string | null;
   song_request: string | null;
-  bus_signup: boolean;
   submitted_at: string | null;
 };
 
@@ -23,5 +22,4 @@ export type GuestResponse = {
   attending: boolean | null;
   dietary_restrictions: string;
   song_request: string;
-  bus_signup: boolean;
 };

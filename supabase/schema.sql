@@ -68,8 +68,6 @@ create table public.rsvps (
     dietary_restrictions text,
     song_request text,
 
-    bus_signup boolean not null default false,
-
     submitted_at timestamptz,
     updated_at timestamptz not null default now()
 );

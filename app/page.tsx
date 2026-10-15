@@ -31,56 +31,67 @@ const faqItems = [
   "When should I RSVP?",
 ];
 
+function PhotoStrip({ className = "", label }: { className?: string; label: string }) {
+  return (
+    <div className={`photo-strip ${className}`} role="img" aria-label={label}>
+      {["one", "two", "three"].map((frame) => (
+        <div className="photo-strip-frame" key={frame} aria-hidden="true">
+          <span>Photo</span>
+        </div>
+      ))}
+      <small>O + J · 11.07.27</small>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <main>
       <header className="site-header">
-        <a className="monogram" href="#top" aria-label="Olivia and Juliann, home">
+        <a className="site-brand" href="#top" aria-label="Olivia and Juliann, home">
           O <span>&amp;</span> J
         </a>
+        <p className="header-date">November 7, 2027</p>
         <nav className="site-nav" aria-label="Main navigation">
-          <a href="#details">Details</a>
+          <a href="#details">The day</a>
           <a href="#travel">Travel</a>
-          <a href="#faq">FAQ</a>
+          <a href="#faq">Questions</a>
           <Link className="nav-rsvp" href="/rsvp">
-            RSVP
+            RSVP <span aria-hidden="true">→</span>
           </Link>
         </nav>
       </header>
 
       <section className="hero" id="top">
-        <div className="hero-flourish hero-flourish-left" aria-hidden="true" />
-        <div className="hero-content">
-          <p className="eyebrow">We&apos;re getting married</p>
-          <h1>
-            <span>Olivia</span>
-            <em>&amp;</em>
-            <span>Juliann</span>
-          </h1>
-          <div className="hero-rule" aria-hidden="true">
-            <span />
-            <svg viewBox="0 0 42 22" role="img">
-              <path d="M1 20C10 20 13 2 21 2s11 18 20 18" />
-            </svg>
-            <span />
+        <div className="hero-inner">
+          <div className="hero-content">
+            <p className="eyebrow">We&apos;re getting married</p>
+            <h1>
+              <span>Olivia</span>
+              <em>&amp;</em>
+              <span>Juliann</span>
+            </h1>
+            <p className="hero-date">Sunday · November 7, 2027</p>
+            <p className="hero-place">Woodbine Mansion · Round Rock, Texas</p>
+            <Link className="button button-primary" href="/rsvp">
+              RSVP to celebrate
+            </Link>
           </div>
-          <p className="hero-date">November 7, 2027</p>
-          <p className="hero-place"> Austin, Texas</p>
-          <Link className="button button-primary" href="/rsvp">
-            RSVP to celebrate
-          </Link>
-        </div>
-        <div className="hero-flourish hero-flourish-right" aria-hidden="true" />
-        <div className="scroll-note" aria-hidden="true">
-          <span>Scroll</span>
-          <i />
+          <div className="hero-photo-area">
+            <span className="tape" aria-hidden="true" />
+            <PhotoStrip className="hero-strip" label="Placeholder for a photo booth strip of Olivia and Juliann" />
+            <p className="handwritten-note">Meet us at the mansion!</p>
+          </div>
         </div>
       </section>
 
       <section className="intro section-shell" aria-labelledby="welcome-title">
-        <div className="image-placeholder portrait-placeholder" role="img" aria-label="Placeholder for a portrait of Olivia and Juliann">
-          <span>Our photo</span>
-          <small>Coming soon</small>
+        <div className="intro-photo-stack">
+          <div className="image-placeholder portrait-placeholder" role="img" aria-label="Placeholder for a portrait of Olivia and Juliann">
+            <span>Our photo</span>
+            <small>Coming soon</small>
+          </div>
+          <span className="photo-caption">Olivia + Juliann, lately</span>
         </div>
         <div className="intro-copy">
           <p className="eyebrow">Together with our favorite people</p>
@@ -143,6 +154,22 @@ export default function Home() {
             </li>
           ))}
         </ol>
+      </section>
+
+      <section className="photo-booth-break" aria-labelledby="snapshots-title">
+        <div className="photo-booth-copy">
+          <p className="eyebrow">A few frames from us</p>
+          <h2 id="snapshots-title">Good times look good on film.</h2>
+          <p>
+            We&apos;re saving room here for the blurry, joyful, perfectly
+            imperfect snapshots that feel the most like us.
+          </p>
+        </div>
+        <div className="photo-strip-row">
+          <PhotoStrip className="strip-left" label="Placeholder for a future photo booth strip" />
+          <PhotoStrip className="strip-center" label="Placeholder for a future photo booth strip" />
+          <PhotoStrip className="strip-right" label="Placeholder for a future photo booth strip" />
+        </div>
       </section>
 
       <section className="travel" id="travel" aria-labelledby="travel-title">
